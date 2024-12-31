@@ -8,6 +8,7 @@ namespace Pinetime {
       None,
       Launcher,
       Clock,
+      HelloPine,
       SysInfo,
       FirmwareUpdate,
       FirmwareValidation,

@@ -61,6 +61,16 @@ void Counter::SetValue(int newValue) {
   UpdateLabel();
 }
 
+void Counter::HideAll() {
+  lv_obj_set_hidden(counterContainer, true);
+  HideControls();
+}
+
+void Counter::ShowAll() {
+  lv_obj_set_hidden(counterContainer, false);
+  ShowControls();
+}
+
 void Counter::HideControls() {
   lv_obj_set_hidden(upBtn, true);
   lv_obj_set_hidden(downBtn, true);
