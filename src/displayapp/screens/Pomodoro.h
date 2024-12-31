@@ -20,16 +20,17 @@ namespace Pinetime {
         // Idle
       };
 
-      class HelloPine : public Screen {
+      class Pomodoro : public Screen {
         public:
-          HelloPine(Controllers::Timer& timerController);
-          ~HelloPine() override;
+          Pomodoro(Controllers::Timer& timerController);
+          ~Pomodoro() override;
           void Refresh() override;
            
           bool OnTouchEvent(TouchEvents event) override;
           bool OnButtonPushed() override;
           void ToggleRunning();
           void UpdateTime();
+          void OnIntervalDone();
 
         private:
           void SetTimerRunning();
@@ -61,12 +62,12 @@ namespace Pinetime {
     }
 
     template <>
-    struct AppTraits<Apps::HelloPine> {
-      static constexpr Apps app = Apps::HelloPine;
+    struct AppTraits<Apps::Pomodoro> {
+      static constexpr Apps app = Apps::Pomodoro;
       static constexpr const char* icon = Screens::Symbols::brain;
 
       static Screens::Screen* Create(AppControllers& controllers) {
-        return new Screens::HelloPine(controllers.pomodoroController);
+        return new Screens::Pomodoro(controllers.pomodoroController);
       };
     };
   }
