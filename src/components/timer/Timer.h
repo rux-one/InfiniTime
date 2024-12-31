@@ -10,12 +10,7 @@ namespace Pinetime {
   namespace Controllers {
     class Timer {
     public:
-      struct TimerStatus {
-        std::chrono::milliseconds distanceToExpiry;
-        bool expired;
-      };
-
-      Timer(void* timerData, TimerCallbackFunction_t timerCallbackFunction);
+      Timer(void* timerData, TimerCallbackFunction_t timerCallbackFunction, char* timerId);
 
       void StartTimer(std::chrono::milliseconds duration);
 
