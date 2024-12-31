@@ -12,6 +12,8 @@ namespace Pinetime {
         void UpBtnPressed();
         void DownBtnPressed();
         void SetValue(int newValue);
+        void HideAll();
+        void ShowAll();
         void HideControls();
         void ShowControls();
         void EnableTwelveHourMode();

@@ -102,6 +102,7 @@ namespace Pinetime {
       Pinetime::Controllers::FirmwareValidator validator;
       Pinetime::Components::LittleVgl lvgl;
       Pinetime::Controllers::Timer timer;
+      Pinetime::Controllers::Timer pomodoroController;
 
       AppControllers controllers;
       TaskHandle_t taskHandle;

@@ -49,6 +49,7 @@
 #include "displayapp/screens/settings/SettingChimes.h"
 #include "displayapp/screens/settings/SettingShakeThreshold.h"
 #include "displayapp/screens/settings/SettingBluetooth.h"
+#include "displayapp/screens/HelloPine.h"
 
 #include "libs/lv_conf.h"
 #include "UserApps.h"
@@ -64,6 +65,10 @@ namespace {
   void TimerCallback(TimerHandle_t xTimer) {
     auto* dispApp = static_cast<DisplayApp*>(pvTimerGetTimerID(xTimer));
     dispApp->PushMessage(Display::Messages::TimerDone);
+  }
+
+  void PomodoroCallback(TimerHandle_t xTimer) {
+    NRF_LOG_INFO("Pomodoro timer finished.");
   }
 }
 
@@ -100,7 +105,8 @@ DisplayApp::DisplayApp(Drivers::St7789& lcd,
     filesystem {filesystem},
     spiNorFlash {spiNorFlash},
     lvgl {lcd, filesystem},
-    timer(this, TimerCallback),
+    timer(this, TimerCallback, "Timer"),
+    pomodoroController(this, PomodoroCallback , "PomodoroTimer"),
     controllers {batteryController,
                  bleController,
                  dateTimeController,
@@ -114,6 +120,7 @@ DisplayApp::DisplayApp(Drivers::St7789& lcd,
                  nullptr,
                  filesystem,
                  timer,
+                 pomodoroController,
                  nullptr,
                  this,
                  lvgl,

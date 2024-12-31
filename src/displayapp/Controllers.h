@@ -46,6 +46,7 @@ namespace Pinetime {
       Pinetime::Controllers::SimpleWeatherService* weatherController;
       Pinetime::Controllers::FS& filesystem;
       Pinetime::Controllers::Timer& timer;
+      Pinetime::Controllers::Timer& pomodoroController;
       Pinetime::System::SystemTask* systemTask;
       Pinetime::Applications::DisplayApp* displayApp;
       Pinetime::Components::LittleVgl& lvgl;
