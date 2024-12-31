@@ -9,7 +9,7 @@ namespace Pinetime {
   namespace Controllers {
     class Timer {
     public:
-      Timer(void* timerData, TimerCallbackFunction_t timerCallbackFunction, char* timerId);
+      Timer(void* timerData, TimerCallbackFunction_t timerCallbackFunction, const char* timerId);
 
       void StartTimer(std::chrono::milliseconds duration);
 

@@ -50,7 +50,7 @@
 #include "displayapp/screens/settings/SettingChimes.h"
 #include "displayapp/screens/settings/SettingShakeThreshold.h"
 #include "displayapp/screens/settings/SettingBluetooth.h"
-#include "displayapp/screens/HelloPine.h"
+#include "displayapp/screens/Pomodoro.h"
 
 #include "libs/lv_conf.h"
 #include "UserApps.h"
@@ -71,7 +71,8 @@ namespace {
   }
 
   void PomodoroCallback(TimerHandle_t xTimer) {
-    NRF_LOG_INFO("Pomodoro timer finished.");
+    auto* dispApp = static_cast<DisplayApp*>(pvTimerGetTimerID(xTimer));
+    dispApp->PushMessage(Display::Messages::PomodoroIntervalDone);
   }
 }
 
@@ -382,6 +383,12 @@ void DisplayApp::Refresh() {
           LoadNewScreen(Apps::Timer, DisplayApp::FullRefreshDirections::Up);
         }
         motorController.RunForDuration(35);
+        break;
+      case Messages::PomodoroIntervalDone:
+        if (currentApp == Apps::Pomodoro) {
+          auto* pomodoro = static_cast<Screens::Pomodoro*>(currentScreen.get());
+          pomodoro->OnIntervalDone();
+        }
         break;
       case Messages::AlarmTriggered:
         if (currentApp == Apps::Alarm) {
