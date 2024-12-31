@@ -2,7 +2,7 @@
 
 using namespace Pinetime::Controllers;
 
-Timer::Timer(void* const timerData, TimerCallbackFunction_t timerCallbackFunction, char* timerId) {
+Timer::Timer(void* const timerData, TimerCallbackFunction_t timerCallbackFunction, const char* timerId) {
   timer = xTimerCreate(timerId, 1, pdFALSE, timerData, timerCallbackFunction);
 }
 

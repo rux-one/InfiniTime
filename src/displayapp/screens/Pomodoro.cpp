@@ -1,17 +1,18 @@
-#include "displayapp/screens/HelloPine.h"
-#include "displayapp/InfiniTimeTheme.h"
 #include <lvgl/lvgl.h>
+#include <libraries/log/nrf_log.h>
+#include "displayapp/screens/Pomodoro.h"
+#include "displayapp/InfiniTimeTheme.h"
 
 using namespace Pinetime::Applications::Screens;
 
 static void btnEventHandler(lv_obj_t* obj, lv_event_t event) {
-  auto* screen = static_cast<HelloPine*>(obj->user_data);
+  auto* screen = static_cast<Pomodoro*>(obj->user_data);
   if (event == LV_EVENT_SHORT_CLICKED) {
     screen->ToggleRunning();
   }
 }
 
-HelloPine::HelloPine(Controllers::Timer& timerController) : timer {timerController} {
+Pomodoro::Pomodoro(Controllers::Timer& timerController) : timer {timerController} {
   workInterval.Create();
   lv_obj_align(workInterval.GetObject(), nullptr, LV_ALIGN_IN_TOP_LEFT, 0, 0);
 
@@ -59,12 +60,12 @@ HelloPine::HelloPine(Controllers::Timer& timerController) : timer {timerControll
   lv_label_set_text(txtElapsedTime, "00:00");
 }
 
-HelloPine::~HelloPine() {
+Pomodoro::~Pomodoro() {
   lv_task_del(taskRefresh);
   lv_obj_clean(lv_scr_act());
 }
 
-void HelloPine::UpdateTime() {
+void Pomodoro::UpdateTime() {
   displaySeconds = std::chrono::duration_cast<std::chrono::seconds>(timer.GetTimeRemaining());
 
   uint16_t elapsedSeconds = displaySeconds.Get().count();
@@ -84,19 +85,19 @@ void HelloPine::UpdateTime() {
   }
 }
 
-void HelloPine::SetTimerRunning() {
+void Pomodoro::SetTimerRunning() {
   workInterval.HideAll();
-  breakInterval.HideControls();
+  breakInterval.HideAll();
   lv_label_set_text_static(txtPlayPause, "Pause");
 }
 
-void HelloPine::SetTimerStopped() {
-  workInterval.ShowControls();
-  breakInterval.ShowControls();
+void Pomodoro::SetTimerStopped() {
+  workInterval.ShowAll();
+  breakInterval.ShowAll();
   lv_label_set_text_static(txtPlayPause, "Start");
 }
 
-void HelloPine::ToggleRunning() {
+void Pomodoro::ToggleRunning() {
   if (timer.IsRunning()) {
     UpdateTime();
     timer.StopTimer();
@@ -109,16 +110,22 @@ void HelloPine::ToggleRunning() {
   }
 }
 
-void HelloPine::Refresh() {
+void Pomodoro::OnIntervalDone() {
+  NRF_LOG_INFO("Pomodoro::OnIntervalDone");
+  state = state == PomodoroState::Work ? PomodoroState::Break : PomodoroState::Work;
+  ToggleRunning();
+}
+
+void Pomodoro::Refresh() {
   if (timer.IsRunning()) {
     UpdateTime();
   }
 }
 
-bool HelloPine::OnTouchEvent([[maybe_unused]] TouchEvents event) {
+bool Pomodoro::OnTouchEvent([[maybe_unused]] TouchEvents event) {
   return false;
 }
 
-bool HelloPine::OnButtonPushed() {
+bool Pomodoro::OnButtonPushed() {
   return false;
 } 

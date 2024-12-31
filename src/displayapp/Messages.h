@@ -25,6 +25,7 @@ namespace Pinetime {
         Chime,
         BleRadioEnableToggle,
         OnChargingEvent,
+        PomodoroIntervalDone,
       };
     }
   }
