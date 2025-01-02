@@ -12,12 +12,21 @@ static void btnEventHandler(lv_obj_t* obj, lv_event_t event) {
   }
 }
 
+void Pomodoro::UpdatePhaseTitle() {
+  if (state == PomodoroState::Work) {
+    lv_label_set_text_static(txtPhase, "Focus on work...");
+  } else {
+    lv_label_set_text_static(txtPhase, "Time for a break!");
+  }
+  lv_obj_align(txtPhase, lv_scr_act(), LV_ALIGN_IN_TOP_MID, 0, 0);
+}
+
 Pomodoro::Pomodoro(Controllers::Timer& timerController) : timer {timerController} {
   workInterval.Create();
-  lv_obj_align(workInterval.GetObject(), nullptr, LV_ALIGN_IN_TOP_LEFT, 0, 0);
+  lv_obj_align(workInterval.GetObject(), nullptr, LV_ALIGN_IN_TOP_LEFT, 20, 20);
 
   breakInterval.Create();
-  lv_obj_align(breakInterval.GetObject(), nullptr, LV_ALIGN_IN_TOP_RIGHT, 0, 0);
+  lv_obj_align(breakInterval.GetObject(), nullptr, LV_ALIGN_IN_TOP_RIGHT, -20, 20);
 
   workInterval.SetValue(config[PomodoroState::Work]);
   breakInterval.SetValue(config[PomodoroState::Break]);
@@ -41,10 +50,16 @@ Pomodoro::Pomodoro(Controllers::Timer& timerController) : timer {timerController
   lv_label_set_text_static(txtPlayPause, "Start");
   // end of: button
 
+  // phase title
+  txtPhase = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_color(txtPhase, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::lightGray);
+  UpdatePhaseTitle(); 
+  // end of: phase title
+
   // progress circle
   progressCircle = lv_linemeter_create(lv_scr_act(), nullptr);
   lv_obj_set_size(progressCircle, 160, 160);
-  lv_obj_align(progressCircle, nullptr, LV_ALIGN_CENTER, 0, -20);
+  lv_obj_align(progressCircle, nullptr, LV_ALIGN_CENTER, 0, -10);
   
   lv_linemeter_set_range(progressCircle, 0, 100);
   lv_linemeter_set_value(progressCircle, 0);
@@ -56,8 +71,13 @@ Pomodoro::Pomodoro(Controllers::Timer& timerController) : timer {timerController
   // end of: progress circle
 
   txtElapsedTime = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_align(txtElapsedTime, nullptr, LV_ALIGN_CENTER, -6, -20);
+  lv_obj_align(txtElapsedTime, nullptr, LV_ALIGN_CENTER, -6, -10);
   lv_label_set_text(txtElapsedTime, "00:00");
+
+  lv_obj_set_hidden(progressCircle, true);
+  lv_obj_set_hidden(txtElapsedTime, true);
+  
+  lv_obj_set_hidden(txtPhase, true);
 }
 
 Pomodoro::~Pomodoro() {
@@ -78,7 +98,7 @@ void Pomodoro::UpdateTime() {
   int progress = config[state] - displaySeconds.Get().count();
   lv_linemeter_set_range(progressCircle, 0, config[state]);
   lv_linemeter_set_value(progressCircle, progress);
-  if (progress > 95) {
+  if (progress > 50) {
     lv_obj_set_style_local_line_color(progressCircle, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_RED);
   } else {
     lv_obj_set_style_local_line_color(progressCircle, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_WHITE);
@@ -89,12 +109,27 @@ void Pomodoro::SetTimerRunning() {
   workInterval.HideAll();
   breakInterval.HideAll();
   lv_label_set_text_static(txtPlayPause, "Pause");
+
+  lv_obj_set_hidden(progressCircle, false); 
+  lv_obj_set_hidden(txtElapsedTime, false);
+
+  lv_obj_set_hidden(txtPhase, false);
 }
 
 void Pomodoro::SetTimerStopped() {
   workInterval.ShowAll();
   breakInterval.ShowAll();
   lv_label_set_text_static(txtPlayPause, "Start");
+
+  lv_obj_set_hidden(progressCircle, true);
+  lv_obj_set_hidden(txtElapsedTime, true);
+  
+  lv_obj_set_hidden(txtPhase, true);
+}
+
+void Pomodoro::ApplyConfig() {
+  config[PomodoroState::Break] = breakInterval.GetValue();
+  config[PomodoroState::Work] = workInterval.GetValue();
 }
 
 void Pomodoro::ToggleRunning() {
@@ -103,6 +138,8 @@ void Pomodoro::ToggleRunning() {
     timer.StopTimer();
     SetTimerStopped();
   } else if (breakInterval.GetValue() + workInterval.GetValue() > 0) {
+    ApplyConfig();
+    
     auto timerDuration = std::chrono::seconds(config[state]);
     timer.StartTimer(timerDuration);
     UpdateTime();
@@ -113,6 +150,7 @@ void Pomodoro::ToggleRunning() {
 void Pomodoro::OnIntervalDone() {
   NRF_LOG_INFO("Pomodoro::OnIntervalDone");
   state = state == PomodoroState::Work ? PomodoroState::Break : PomodoroState::Work;
+  UpdatePhaseTitle();
   ToggleRunning();
 }
 
