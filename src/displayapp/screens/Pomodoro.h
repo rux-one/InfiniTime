@@ -35,6 +35,8 @@ namespace Pinetime {
         private:
           void SetTimerRunning();
           void SetTimerStopped();
+          void UpdatePhaseTitle();
+          void ApplyConfig();
 
           std::unordered_map<PomodoroState, uint16_t> config = {
               {PomodoroState::Work, 6},
@@ -48,6 +50,7 @@ namespace Pinetime {
           Widgets::Counter breakInterval = Widgets::Counter(0, 59, jetbrains_mono_42);
           Utility::DirtyValue<std::chrono::seconds> displaySeconds;
 
+          lv_obj_t* txtPhase;
           lv_obj_t* progressCircle;
           lv_obj_t* txtElapsedTime;
           lv_obj_t* btnPlayPause;
