@@ -22,7 +22,7 @@ namespace Pinetime {
 
       class Pomodoro : public Screen {
         public:
-          Pomodoro(Controllers::Timer& timerController);
+          Pomodoro(Controllers::Timer& timerController, Controllers::MotorController& motorController);
           ~Pomodoro() override;
           void Refresh() override;
            
@@ -46,6 +46,7 @@ namespace Pinetime {
           uint_fast16_t elapsedSeconds = config[state] * 60;
 
           Controllers::Timer& timer;
+          Controllers::MotorController& motor;
           Widgets::Counter workInterval = Widgets::Counter(0, 59, jetbrains_mono_42);
           Widgets::Counter breakInterval = Widgets::Counter(0, 59, jetbrains_mono_42);
           Utility::DirtyValue<std::chrono::seconds> displaySeconds;
@@ -70,7 +71,7 @@ namespace Pinetime {
       static constexpr const char* icon = Screens::Symbols::brain;
 
       static Screens::Screen* Create(AppControllers& controllers) {
-        return new Screens::Pomodoro(controllers.pomodoroController);
+        return new Screens::Pomodoro(controllers.pomodoroController, controllers.motorController);
       };
     };
   }

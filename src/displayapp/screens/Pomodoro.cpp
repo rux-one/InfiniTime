@@ -2,6 +2,7 @@
 #include <libraries/log/nrf_log.h>
 #include "displayapp/screens/Pomodoro.h"
 #include "displayapp/InfiniTimeTheme.h"
+#include "components/motor/MotorController.h"
 
 using namespace Pinetime::Applications::Screens;
 
@@ -21,7 +22,9 @@ void Pomodoro::UpdatePhaseTitle() {
   lv_obj_align(txtPhase, lv_scr_act(), LV_ALIGN_IN_TOP_MID, 0, 0);
 }
 
-Pomodoro::Pomodoro(Controllers::Timer& timerController) : timer {timerController} {
+Pomodoro::Pomodoro(Controllers::Timer& timerController,
+                   Controllers::MotorController& motorController)
+  : timer {timerController}, motor {motorController} {
   workInterval.Create();
   lv_obj_align(workInterval.GetObject(), nullptr, LV_ALIGN_IN_TOP_LEFT, 20, 20);
 
@@ -139,7 +142,7 @@ void Pomodoro::ToggleRunning() {
     SetTimerStopped();
   } else if (breakInterval.GetValue() + workInterval.GetValue() > 0) {
     ApplyConfig();
-    
+
     auto timerDuration = std::chrono::seconds(config[state]);
     timer.StartTimer(timerDuration);
     UpdateTime();
@@ -149,6 +152,7 @@ void Pomodoro::ToggleRunning() {
 
 void Pomodoro::OnIntervalDone() {
   NRF_LOG_INFO("Pomodoro::OnIntervalDone");
+  motor.RunForDuration(50);
   state = state == PomodoroState::Work ? PomodoroState::Break : PomodoroState::Work;
   UpdatePhaseTitle();
   ToggleRunning();
