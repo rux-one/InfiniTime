@@ -98,8 +98,8 @@ void Pomodoro::UpdateTime() {
   sprintf(timeStr, "%02d:%02d", minutes, seconds);
   lv_label_set_text(txtElapsedTime, timeStr);
 
-  int progress = config[state] - displaySeconds.Get().count();
-  lv_linemeter_set_range(progressCircle, 0, config[state]);
+  int progress = (config[state] * 60) - displaySeconds.Get().count();
+  lv_linemeter_set_range(progressCircle, 0, config[state] * 60);
   lv_linemeter_set_value(progressCircle, progress);
   if (progress > 50) {
     lv_obj_set_style_local_line_color(progressCircle, LV_LINEMETER_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_RED);
@@ -143,7 +143,7 @@ void Pomodoro::ToggleRunning() {
   } else if (breakInterval.GetValue() + workInterval.GetValue() > 0) {
     ApplyConfig();
 
-    auto timerDuration = std::chrono::seconds(config[state]);
+    auto timerDuration = std::chrono::seconds(config[state] * 60);
     timer.StartTimer(timerDuration);
     UpdateTime();
     SetTimerRunning();
