@@ -39,8 +39,8 @@ namespace Pinetime {
           void ApplyConfig();
 
           std::unordered_map<PomodoroState, uint16_t> config = {
-              {PomodoroState::Work, 6},
-              {PomodoroState::Break, 3},
+              {PomodoroState::Work, 25},
+              {PomodoroState::Break, 5},
           };
           PomodoroState state = PomodoroState::Work;
           uint_fast16_t elapsedSeconds = config[state] * 60;
