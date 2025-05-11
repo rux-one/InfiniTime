@@ -14,6 +14,7 @@
 #include "displayapp/screens/WatchFaceInfineat.h"
 #include "displayapp/screens/WatchFacePineTimeStyle.h"
 #include "displayapp/screens/WatchFaceTerminal.h"
+#include "displayapp/screens/SnakeGame.h"
 
 namespace Pinetime {
   namespace Applications {
@@ -53,6 +54,15 @@ namespace Pinetime {
     consteval std::array<WatchFaceDescription, sizeof...(ts)> CreateWatchFaceDescriptions(T<ts...>) {
       return {CreateWatchFaceDescription<ts>()...};
     }
+
+    template <>
+    struct AppTraits<Apps::Snake> {
+      static constexpr Apps app = Apps::Snake;
+      static constexpr const char* icon = Screens::Symbols::dice; // Use dice icon as a placeholder
+      static Screens::Screen* Create(AppControllers& controllers) {
+        return new Screens::SnakeGame();
+      }
+    };
 
     constexpr auto userApps = CreateAppDescriptions(UserAppTypes {});
     constexpr auto userWatchFaces = CreateWatchFaceDescriptions(UserWatchFaceTypes {});
