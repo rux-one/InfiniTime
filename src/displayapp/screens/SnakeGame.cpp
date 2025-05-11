@@ -92,7 +92,12 @@ void SnakeGame::MoveSnake() {
     case Direction::Left: next.x--; break;
     case Direction::Right: next.x++; break;
   }
-  // Check for collision
+  // Wrap-around map
+  if (next.x < 0) next.x = boardWidth - 1;
+  if (next.x >= boardWidth) next.x = 0;
+  if (next.y < 0) next.y = boardHeight - 1;
+  if (next.y >= boardHeight) next.y = 0;
+  // Check for collision with self only
   if (CheckCollision(next)) {
     gameOver = true;
     return;
@@ -110,9 +115,7 @@ void SnakeGame::MoveSnake() {
 }
 
 bool SnakeGame::CheckCollision(const Point& nextHead) const {
-  // Check wall collision
-  if (nextHead.x < 0 || nextHead.x >= boardWidth || nextHead.y < 0 || nextHead.y >= boardHeight)
-    return true;
+  // Nie sprawdzamy już kolizji ze ścianami (wrap-around)
   // Check self collision
   for (const auto& s : snake) {
     if (s == nextHead) return true;
