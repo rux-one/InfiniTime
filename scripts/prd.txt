@@ -1,0 +1,48 @@
+<context>
+# Overview  
+An app for InfiniTime watch which is a classic snake game. It's available as another built in app like others in this PineTime firmware.
+
+# Core Features  
+- A snake that can be change direction when tapping specific screen area
+- A food that is randomly placed on the screen (dots)
+- Snake can go through the screen borders and appear on the other sides
+- Game world size is the screen resolution
+- "Eating" dots/food extends the snake and increases the score
+- The score is displayed in the top-left corner of the screen
+
+# User Experience
+- The game starts with a snake of length 2 dots/pixels
+- User can change the direction of the snake by tapping specific screen area (left or right vertical half)
+- Snake will go trough the walls and appear on the other side
+- Snake will eat the dots/food and extend it's length
+- In this iteration the game is endless
+</context>
+
+<PRD>
+# Technical Architecture
+- Game is a built-in app for this firmware which is written in C++ 
+- Game is drawn using the LVGL library
+- Game is a state machine with the following states:
+  - Start
+  - Game
+  - Game Over
+  
+# Data models:
+  - Snake length and position
+  - Food position
+  - Score
+  
+# UI/UX:
+  - Score display in the top-left corner
+  - Game over screen with restart button
+  - Start screen with start button
+  
+# Logical Dependency Chain
+- Which features need to be built first (foundation)
+- Getting as quickly as possible to something usable/visible front end that works
+- Properly pacing and scoping each feature so it is atomic but can also be built upon and improved as development approaches]
+
+# Appendix
+- This is existing firmware with few apps built-in, you will analyze how are they built and keep the new app style as close as possible
+
+</PRD>

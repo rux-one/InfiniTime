@@ -1,0 +1,43 @@
+# Task ID: 5
+# Title: Implement Start Screen UI
+# Status: pending
+# Dependencies: 2
+# Priority: medium
+# Description: Create the start screen UI with a start button using LVGL.
+# Details:
+1. Design a simple start screen layout with LVGL
+2. Add a title for the game
+3. Create a start button
+4. Implement button click handler to transition to Game state
+
+Example implementation:
+```cpp
+void SnakeGameApp::CreateStartScreen() {
+  startScreen = lv_obj_create(nullptr, nullptr);
+  
+  // Create title
+  lv_obj_t* title = lv_label_create(startScreen, nullptr);
+  lv_label_set_text(title, "SNAKE GAME");
+  lv_obj_align(title, nullptr, LV_ALIGN_IN_TOP_MID, 0, 20);
+  
+  // Create start button
+  lv_obj_t* startBtn = lv_btn_create(startScreen, nullptr);
+  lv_obj_set_size(startBtn, 120, 50);
+  lv_obj_align(startBtn, nullptr, LV_ALIGN_CENTER, 0, 0);
+  lv_obj_set_event_cb(startBtn, [](lv_obj_t* obj, lv_event_t event) {
+    if (event == LV_EVENT_CLICKED) {
+      // Get instance and switch state
+      auto* instance = static_cast<SnakeGameApp*>(lv_obj_get_user_data(obj));
+      instance->SwitchState(States::Game);
+    }
+  });
+  lv_obj_set_user_data(startBtn, this);
+  
+  // Add label to button
+  lv_obj_t* btnLabel = lv_label_create(startBtn, nullptr);
+  lv_label_set_text(btnLabel, "START");
+}
+```
+
+# Test Strategy:
+Manually test the start screen UI to verify: proper layout rendering, button appearance and responsiveness, and correct state transition when the start button is pressed.

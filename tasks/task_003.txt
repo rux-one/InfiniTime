@@ -1,0 +1,50 @@
+# Task ID: 3
+# Title: Implement Data Models
+# Status: pending
+# Dependencies: 2
+# Priority: high
+# Description: Create the data structures needed to represent the snake, food, and score.
+# Details:
+1. Define a Point structure to represent positions on the screen
+2. Implement a Snake class that stores the snake's segments as a collection of Points
+3. Create a Food class to manage food position
+4. Add a score counter
+
+Example implementations:
+```cpp
+struct Point {
+  int16_t x;
+  int16_t y;
+  
+  bool operator==(const Point& other) const {
+    return x == other.x && y == other.y;
+  }
+};
+
+class Snake {
+public:
+  Snake(uint16_t initialLength = 2);
+  void Move(Direction direction);
+  void Grow();
+  bool CollidesWith(const Point& point) const;
+  bool CollidesWithSelf() const;
+  const std::vector<Point>& GetSegments() const;
+  
+private:
+  std::vector<Point> segments;
+  Direction currentDirection = Direction::Right;
+};
+
+class Food {
+public:
+  Food();
+  void Reposition(const Snake& snake, uint16_t maxX, uint16_t maxY);
+  const Point& GetPosition() const;
+  
+private:
+  Point position;
+};
+```
+
+# Test Strategy:
+Write unit tests for each data model to verify: snake movement in all directions, snake growth, collision detection, food repositioning logic, and score management.

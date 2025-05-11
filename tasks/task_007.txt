@@ -1,0 +1,52 @@
+# Task ID: 7
+# Title: Implement Game Over Screen UI
+# Status: pending
+# Dependencies: 2
+# Priority: medium
+# Description: Create the game over screen UI with a restart button using LVGL.
+# Details:
+1. Design the game over screen layout with LVGL
+2. Add a game over message
+3. Display the final score
+4. Create a restart button
+5. Implement button click handler to transition back to Start state
+
+Example implementation:
+```cpp
+void SnakeGameApp::CreateGameOverScreen() {
+  gameOverScreen = lv_obj_create(nullptr, nullptr);
+  
+  // Create game over message
+  lv_obj_t* gameOverLabel = lv_label_create(gameOverScreen, nullptr);
+  lv_label_set_text(gameOverLabel, "GAME OVER");
+  lv_obj_align(gameOverLabel, nullptr, LV_ALIGN_IN_TOP_MID, 0, 20);
+  
+  // Create score display
+  finalScoreLabel = lv_label_create(gameOverScreen, nullptr);
+  lv_label_set_text_fmt(finalScoreLabel, "Final Score: %d", score);
+  lv_obj_align(finalScoreLabel, nullptr, LV_ALIGN_CENTER, 0, -20);
+  
+  // Create restart button
+  lv_obj_t* restartBtn = lv_btn_create(gameOverScreen, nullptr);
+  lv_obj_set_size(restartBtn, 120, 50);
+  lv_obj_align(restartBtn, nullptr, LV_ALIGN_IN_BOTTOM_MID, 0, -20);
+  lv_obj_set_event_cb(restartBtn, [](lv_obj_t* obj, lv_event_t event) {
+    if (event == LV_EVENT_CLICKED) {
+      auto* instance = static_cast<SnakeGameApp*>(lv_obj_get_user_data(obj));
+      instance->SwitchState(States::Start);
+    }
+  });
+  lv_obj_set_user_data(restartBtn, this);
+  
+  // Add label to button
+  lv_obj_t* btnLabel = lv_label_create(restartBtn, nullptr);
+  lv_label_set_text(btnLabel, "RESTART");
+}
+
+void SnakeGameApp::UpdateFinalScore() {
+  lv_label_set_text_fmt(finalScoreLabel, "Final Score: %d", score);
+}
+```
+
+# Test Strategy:
+Test the game over screen UI by verifying: proper display of the game over message and final score, button appearance and responsiveness, and correct state transition when the restart button is pressed.

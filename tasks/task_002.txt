@@ -1,0 +1,37 @@
+# Task ID: 2
+# Title: Create Basic Snake Game App Structure
+# Status: pending
+# Dependencies: 1
+# Priority: high
+# Description: Set up the basic structure for the Snake game app following the patterns used in existing InfiniTime apps.
+# Details:
+1. Create a new directory for the Snake game app in the appropriate location
+2. Implement the basic app class structure with necessary includes
+3. Set up the state machine framework with Start, Game, and Game Over states
+4. Register the app with the system following existing patterns
+5. Implement empty handlers for each state
+6. Add app icon and entry in the app launcher
+
+Example class structure:
+```cpp
+class SnakeGameApp : public App {
+public:
+  enum class States { Start, Game, GameOver };
+  
+  SnakeGameApp();
+  ~SnakeGameApp() override;
+  
+  void OnStart();
+  void OnGame();
+  void OnGameOver();
+  
+  void SwitchState(States newState);
+  
+private:
+  States currentState = States::Start;
+  // Other members will be added later
+};
+```
+
+# Test Strategy:
+Compile the basic app structure and verify it can be launched from the app menu without crashing. Test state transitions with mock implementations.

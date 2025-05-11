@@ -1,0 +1,44 @@
+# Task ID: 4
+# Title: Implement Game Logic
+# Status: pending
+# Dependencies: 3
+# Priority: high
+# Description: Implement the core game logic including snake movement, collision detection, and scoring.
+# Details:
+1. Implement snake movement logic with direction control
+2. Add logic for the snake to pass through screen borders
+3. Implement collision detection between snake and food
+4. Add score increment when food is eaten
+5. Implement snake growth when food is eaten
+6. Add game loop timing to control snake speed
+
+Example game loop:
+```cpp
+void SnakeGameApp::OnGame() {
+  // Update game state based on elapsed time
+  currentTime = lv_tick_get();
+  if (currentTime - lastUpdateTime >= updateInterval) {
+    lastUpdateTime = currentTime;
+    
+    // Move snake in current direction
+    snake.Move(currentDirection);
+    
+    // Handle screen wrapping
+    WrapSnakePosition();
+    
+    // Check for food collision
+    if (snake.HeadCollidesWith(food.GetPosition())) {
+      snake.Grow();
+      score++;
+      food.Reposition(snake, screenWidth, screenHeight);
+    }
+    
+    // Check for self collision (not needed in this iteration as game is endless)
+    
+    // Redraw game elements
+    DrawGame();
+  }
+}
+
+# Test Strategy:
+Test the game logic by simulating input events and verifying: correct snake movement, proper wrapping at screen borders, food consumption and snake growth, and accurate score updates.

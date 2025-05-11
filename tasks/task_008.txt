@@ -1,0 +1,59 @@
+# Task ID: 8
+# Title: Implement State Machine Logic
+# Status: pending
+# Dependencies: 5, 6, 7
+# Priority: high
+# Description: Implement the state machine logic to handle transitions between game states.
+# Details:
+1. Implement the state switching logic
+2. Handle initialization and cleanup for each state
+3. Connect the UI screens to their respective states
+4. Ensure proper resource management during state transitions
+
+Example implementation:
+```cpp
+void SnakeGameApp::SwitchState(States newState) {
+  // Clean up current state
+  switch (currentState) {
+    case States::Start:
+      lv_obj_del(startScreen);
+      startScreen = nullptr;
+      break;
+    case States::Game:
+      lv_obj_del(gameScreen);
+      gameScreen = nullptr;
+      break;
+    case States::GameOver:
+      lv_obj_del(gameOverScreen);
+      gameOverScreen = nullptr;
+      break;
+  }
+  
+  // Initialize new state
+  currentState = newState;
+  switch (currentState) {
+    case States::Start:
+      CreateStartScreen();
+      lv_scr_load(startScreen);
+      break;
+    case States::Game:
+      // Reset game state
+      score = 0;
+      snake = Snake(2); // Initial length of 2
+      food.Reposition(snake, screenWidth, screenHeight);
+      lastUpdateTime = lv_tick_get();
+      
+      CreateGameScreen();
+      lv_scr_load(gameScreen);
+      break;
+    case States::GameOver:
+      CreateGameOverScreen();
+      UpdateFinalScore();
+      lv_scr_load(gameOverScreen);
+      break;
+  }
+}
+```
+
+# Test Strategy:
+Test the state machine by triggering state transitions and verifying: proper initialization of each state, correct cleanup of resources, and appropriate UI updates during transitions.

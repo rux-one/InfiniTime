@@ -1,0 +1,68 @@
+# Task ID: 6
+# Title: Implement Game Screen UI
+# Status: pending
+# Dependencies: 3, 4
+# Priority: high
+# Description: Create the game screen UI with the game area and score display using LVGL.
+# Details:
+1. Design the game screen layout with LVGL
+2. Add a score display in the top-left corner
+3. Create a drawing area for the game elements (snake and food)
+4. Implement drawing functions for the snake and food
+
+Example implementation:
+```cpp
+void SnakeGameApp::CreateGameScreen() {
+  gameScreen = lv_obj_create(nullptr, nullptr);
+  
+  // Create score label
+  scoreLabel = lv_label_create(gameScreen, nullptr);
+  lv_label_set_text_fmt(scoreLabel, "Score: %d", score);
+  lv_obj_align(scoreLabel, nullptr, LV_ALIGN_IN_TOP_LEFT, 5, 5);
+  
+  // Create game canvas
+  gameCanvas = lv_canvas_create(gameScreen, nullptr);
+  // Set up canvas buffer and size based on screen dimensions
+  // ...
+  
+  // Set up touch event handling for direction control
+  lv_obj_set_event_cb(gameScreen, [](lv_obj_t* obj, lv_event_t event) {
+    if (event == LV_EVENT_PRESSED) {
+      auto* instance = static_cast<SnakeGameApp*>(lv_obj_get_user_data(obj));
+      lv_point_t point;
+      lv_indev_get_point(lv_indev_get_act(), &point);
+      
+      // Change direction based on which half of the screen was tapped
+      if (point.x < LV_HOR_RES / 2) {
+        // Left half - turn left relative to current direction
+        instance->TurnSnakeLeft();
+      } else {
+        // Right half - turn right relative to current direction
+        instance->TurnSnakeRight();
+      }
+    }
+  });
+  lv_obj_set_user_data(gameScreen, this);
+}
+
+void SnakeGameApp::UpdateScore() {
+  lv_label_set_text_fmt(scoreLabel, "Score: %d", score);
+}
+
+void SnakeGameApp::DrawGame() {
+  // Clear canvas
+  lv_canvas_fill_bg(gameCanvas, LV_COLOR_BLACK, LV_OPA_COVER);
+  
+  // Draw food
+  const Point& foodPos = food.GetPosition();
+  lv_canvas_set_px(gameCanvas, foodPos.x, foodPos.y, LV_COLOR_RED);
+  
+  // Draw snake
+  for (const auto& segment : snake.GetSegments()) {
+    lv_canvas_set_px(gameCanvas, segment.x, segment.y, LV_COLOR_GREEN);
+  }
+}
+```
+
+# Test Strategy:
+Test the game screen UI by verifying: proper rendering of the snake and food, accurate score display and updates, and correct handling of touch events for direction changes.

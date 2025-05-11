@@ -1,0 +1,52 @@
+# Task ID: 9
+# Title: Implement Touch Input Handling
+# Status: pending
+# Dependencies: 4, 6
+# Priority: high
+# Description: Implement the touch input handling to control the snake's direction.
+# Details:
+1. Implement logic to detect touch events on the left and right halves of the screen
+2. Add direction change logic based on touch position
+3. Ensure the snake cannot immediately reverse direction (e.g., from right to left)
+
+Example implementation:
+```cpp
+enum class Direction { Up, Right, Down, Left };
+
+void SnakeGameApp::TurnSnakeLeft() {
+  switch (currentDirection) {
+    case Direction::Up:
+      currentDirection = Direction::Left;
+      break;
+    case Direction::Right:
+      currentDirection = Direction::Up;
+      break;
+    case Direction::Down:
+      currentDirection = Direction::Right;
+      break;
+    case Direction::Left:
+      currentDirection = Direction::Down;
+      break;
+  }
+}
+
+void SnakeGameApp::TurnSnakeRight() {
+  switch (currentDirection) {
+    case Direction::Up:
+      currentDirection = Direction::Right;
+      break;
+    case Direction::Right:
+      currentDirection = Direction::Down;
+      break;
+    case Direction::Down:
+      currentDirection = Direction::Left;
+      break;
+    case Direction::Left:
+      currentDirection = Direction::Up;
+      break;
+  }
+}
+```
+
+# Test Strategy:
+Test touch input handling by simulating touch events on different parts of the screen and verifying: correct direction changes based on touch position, prevention of immediate direction reversal, and proper integration with the game logic.
