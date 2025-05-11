@@ -5,16 +5,35 @@
 
 using namespace Pinetime::Applications::Screens;
 
-SnakeGame::SnakeGame() : Screen() {
-  StartGame();
+void SnakeGame::ChangeDirection(Direction newDir) {
+  // Nie pozwalaj na zmianę na kierunek przeciwny
+  if ((direction == Direction::Up && newDir == Direction::Down) ||
+      (direction == Direction::Down && newDir == Direction::Up) ||
+      (direction == Direction::Left && newDir == Direction::Right) ||
+      (direction == Direction::Right && newDir == Direction::Left)) {
+    return;
+  }
+  direction = newDir;
 }
 
+SnakeGame::SnakeGame() : Screen() {
+  StartGame();
+  tickTask = lv_task_create([](lv_task_t* t){
+    static_cast<SnakeGame*>(t->user_data)->OnTick();
+  }, 200, LV_TASK_PRIO_LOW, this);
+
+  // Touch/gesture support
+  lv_obj_t* scr = lv_scr_act();
+  lv_obj_set_user_data(scr, this);
+  lv_obj_set_event_cb(scr, TouchEventHandler);
+}
 
 SnakeGame::~SnakeGame() {
-  // Cleanup if needed
+  if (tickTask) lv_task_del(tickTask);
 }
 
 void SnakeGame::StartGame() {
+  currentState = States::Game;
   // Start in the center
   snake.clear();
   Point start = {boardWidth / 2, boardHeight / 2};
@@ -23,6 +42,22 @@ void SnakeGame::StartGame() {
   score = 0;
   gameOver = false;
   PlaceFood();
+  DrawBoard();
+}
+
+void SnakeGame::OnStart() {
+  currentState = States::Start;
+  StartGame();
+}
+
+void SnakeGame::OnGame() {
+  currentState = States::Game;
+  // Możesz dodać dodatkową logikę przejścia do stanu gry
+}
+
+void SnakeGame::OnGameOver() {
+  currentState = States::GameOver;
+  gameOver = true;
   DrawBoard();
 }
 
@@ -86,9 +121,22 @@ bool SnakeGame::CheckCollision(const Point& nextHead) const {
 }
 
 void SnakeGame::OnTick() {
-  if (!gameOver) {
-    MoveSnake();
-    DrawBoard();
+  switch (currentState) {
+    case States::Start:
+      // Możesz dodać animację lub ekran startowy
+      break;
+    case States::Game:
+      if (!gameOver) {
+        MoveSnake();
+        DrawBoard();
+        if (gameOver) {
+          OnGameOver();
+        }
+      }
+      break;
+    case States::GameOver:
+      // Ekran końca gry, czekaj na restart
+      break;
   }
 }
 

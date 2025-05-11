@@ -21,6 +21,7 @@ namespace Pinetime {
 
 
         enum class Direction { Up, Down, Left, Right };
+        enum class States { Start, Game, GameOver };
 
         static constexpr int boardWidth = 16;
         static constexpr int boardHeight = 16;
@@ -28,8 +29,10 @@ namespace Pinetime {
         std::vector<Point> snake; // Snake body, head at front
         Point food;
         Direction direction;
+        States currentState = States::Start;
         bool gameOver = false;
         int score = 0;
+        lv_task_t* tickTask = nullptr; // LVGL periodic task for game loop
 
         // --- Game Logic Methods ---
         void StartGame();
@@ -39,6 +42,16 @@ namespace Pinetime {
         void ChangeDirection(Direction newDir);
         void OnTick(); // To be called on timer
         void DrawBoard(); // Render snake, food, and board
+
+        // State handlers
+        void OnStart();
+        void OnGame();
+        void OnGameOver();
+
+        // Touch/gesture support
+        static void TouchEventHandler(lv_obj_t* obj, lv_event_t event);
+        lv_point_t touchStart;
+
       };
 
 
