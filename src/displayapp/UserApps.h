@@ -59,7 +59,7 @@ namespace Pinetime {
     struct AppTraits<Apps::Snake> {
       static constexpr Apps app = Apps::Snake;
       static constexpr const char* icon = Screens::Symbols::dice; // Use dice icon as a placeholder
-      static Screens::Screen* Create(AppControllers& controllers) {
+      static Screens::Screen* Create(AppControllers& /*controllers*/) {
         return new Screens::SnakeGame();
       }
     };

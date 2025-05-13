@@ -1,6 +1,6 @@
 # Task ID: 4
 # Title: Implement Game Logic
-# Status: pending
+# Status: done
 # Dependencies: 3
 # Priority: high
 # Description: Implement the core game logic including snake movement, collision detection, and scoring.

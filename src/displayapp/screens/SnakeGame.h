@@ -43,13 +43,15 @@ namespace Pinetime {
         void OnTick(); // To be called on timer
         void DrawBoard(); // Render snake, food, and board
 
+        // Event Handlers
+        static void TouchEventHandler(lv_obj_t* obj, lv_event_t event);
+
         // State handlers
         void OnStart();
         void OnGame();
         void OnGameOver();
 
         // Touch/gesture support
-        static void TouchEventHandler(lv_obj_t* obj, lv_event_t event);
         lv_point_t touchStart;
 
       };

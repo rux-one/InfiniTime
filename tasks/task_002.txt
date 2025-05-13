@@ -1,6 +1,6 @@
 # Task ID: 2
 # Title: Create Basic Snake Game App Structure
-# Status: pending
+# Status: done
 # Dependencies: 1
 # Priority: high
 # Description: Set up the basic structure for the Snake game app following the patterns used in existing InfiniTime apps.

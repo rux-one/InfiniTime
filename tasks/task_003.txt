@@ -1,6 +1,6 @@
 # Task ID: 3
 # Title: Implement Data Models
-# Status: pending
+# Status: done
 # Dependencies: 2
 # Priority: high
 # Description: Create the data structures needed to represent the snake, food, and score.
