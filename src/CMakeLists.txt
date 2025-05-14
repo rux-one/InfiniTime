@@ -393,6 +393,7 @@ list(APPEND SOURCE_FILES
         displayapp/screens/Timer.cpp
         displayapp/screens/Dice.cpp
         displayapp/screens/SnakeGame.cpp
+        displayapp/screens/SnakeGame_TouchEventHandler.cpp
         displayapp/screens/PassKey.cpp
         displayapp/screens/Error.cpp
         displayapp/screens/Alarm.cpp

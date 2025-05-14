@@ -143,31 +143,6 @@ void SnakeGame::OnTick() {
   }
 }
 
-void SnakeGame::TouchEventHandler(lv_obj_t* obj, lv_event_t event) {
-    SnakeGame* game = static_cast<SnakeGame*>(lv_obj_get_user_data(obj));
-    if (game == nullptr) return;
-
-    if (event == LV_EVENT_GESTURE) {
-        lv_gesture_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
-        switch (dir) {
-            case LV_GESTURE_DIR_TOP:
-                game->ChangeDirection(Direction::Up);
-                break;
-            case LV_GESTURE_DIR_BOTTOM:
-                game->ChangeDirection(Direction::Down);
-                break;
-            case LV_GESTURE_DIR_LEFT:
-                game->ChangeDirection(Direction::Left);
-                break;
-            case LV_GESTURE_DIR_RIGHT:
-                game->ChangeDirection(Direction::Right);
-                break;
-            default:
-                break;
-        }
-    }
-}
-
 void SnakeGame::DrawBoard() {
   // Clear screen
   lv_obj_clean(lv_scr_act());
