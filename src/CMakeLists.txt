@@ -429,6 +429,8 @@ list(APPEND SOURCE_FILES
         displayapp/screens/WatchFacePineTimeStyle.cpp
         displayapp/screens/WatchFaceCasioStyleG7710.cpp
         displayapp/screens/WatchFacePrideFlag.cpp
+        displayapp/screens/OnionWatchFace.cpp
+        displayapp/images/onion_240_indexed.c
 
         ##
 
