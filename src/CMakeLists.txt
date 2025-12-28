@@ -430,7 +430,9 @@ list(APPEND SOURCE_FILES
         displayapp/screens/WatchFaceCasioStyleG7710.cpp
         displayapp/screens/WatchFacePrideFlag.cpp
         displayapp/screens/OnionWatchFace.cpp
+        displayapp/screens/CccWatchFace.cpp
         displayapp/images/onion_240_indexed.c
+        displayapp/images/39c3_240_indexed.c
 
         ##
 
